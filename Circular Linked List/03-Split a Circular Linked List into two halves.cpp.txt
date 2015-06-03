@@ -1,0 +1,79 @@
+#include <iostream>
+using namespace std;
+
+struct node
+{
+	int a;
+	struct node* next;
+};
+
+void insert(struct node** head,int data)
+{
+	struct node* looper = *head;
+	struct node* temp = (struct node*)malloc(sizeof(struct node));
+	temp->a = data;
+	temp->next = NULL;
+	if((*head) == NULL)
+	{
+		(*head) = temp;
+		return;
+	}
+	else
+	{
+		while(looper->next!=NULL)
+		{
+			looper = looper->next;
+		}
+		looper->next = temp;
+		return;
+	}
+}
+
+void print(struct node* head)
+{
+	struct node* first = head;
+	if(head!=NULL)
+	{
+	do
+	{
+		printf("%d ",head->a);
+		head = head->next;
+	}while(head!=first);
+	}
+	printf("\n");
+}
+
+struct node* splitIntoTwo(struct node* head)
+{
+	struct node* slow = head;
+	struct node* fast = head->next;
+	while((fast != head)&&(fast->next!=head))
+	{
+		slow = slow->next;
+		fast = fast->next->next;
+	}
+	struct node* newHead = slow->next;
+	slow->next=head;
+	fast = newHead;
+	while(fast!=head)
+	{
+		slow = fast;
+		fast = fast->next;
+	}
+	slow->next = newHead;
+	return newHead;
+}
+int main() {
+	struct node* head = NULL;
+	struct node* head2= NULL;
+	insert(&head,10);
+	insert(&head,20);
+	insert(&head,30);
+	insert(&head,40);
+	head->next->next->next->next = head;
+	print(head);
+	struct node* second = splitIntoTwo(head);
+	print(head);
+	print(second);
+	return 0;
+}
